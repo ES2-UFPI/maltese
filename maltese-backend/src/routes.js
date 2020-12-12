@@ -7,9 +7,9 @@ const routes = express.Router();
 
 routes.get("/clients/:provider_id", ClientControllers.showProductsStore);
 
-routes.post("/Product", ProductContollers.store);
-routes.get("/Product", ProductContollers.index);
-routes.put("/Product/:product_id", ProductContollers.update);
-routes.delete("/Product/:product_id", ProductContollers.delete);
+routes.post("/products", ProductContollers.store);
+routes.get("/products", ProductContollers.index);
+routes.put("/products/:product_id", ProductContollers.update);
+routes.delete("/products/:product_id", ProductContollers.delete);
 
 module.exports = routes;
