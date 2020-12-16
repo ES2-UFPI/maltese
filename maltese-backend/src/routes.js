@@ -4,6 +4,7 @@ const ClientControllers = require("./controllers/ClientControllers");
 const ProductContollers = require("./controllers/ProductControllers");
 const ProviderController = require("./controllers/ProviderControllers");
 const UserControllers = require("./controllers/UserControllers");
+const OrderController = require('./controllers/OrderController');
 
 const routes = express.Router();
 
@@ -27,5 +28,12 @@ routes.get("/user", UserControllers.read);
 routes.post("/user", UserControllers.create);
 routes.put("/user", UserControllers.update);
 routes.delete("/user", UserControllers.delete);
+
+// Order CRUD routes
+routes.get("/order/list", OrderController.index);
+routes.get("/order", OrderController.read);
+routes.post("/order", OrderController.create);
+routes.put("/order", OrderController.update);
+routes.delete("/order", OrderController.delete);
 
 module.exports = routes;
