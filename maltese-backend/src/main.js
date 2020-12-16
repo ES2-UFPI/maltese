@@ -3,9 +3,10 @@ const mongoose = require("mongoose");
 
 const routes = require("./routes");
 
-const uri = "mongodb+srv://maltese:ufpi@maltese.hwddu.mongodb.net/testes?retryWrites=true&w=majority"
+const uri = "mongodb+srv://maltese:ufpi@maltese.hwddu.mongodb.net/previa?retryWrites=true&w=majority"
 mongoose.connect(uri, {
     useNewUrlParser: true,
+    useFindAndModify: false,
     useUnifiedTopology: true,
     useCreateIndex: true,
 });

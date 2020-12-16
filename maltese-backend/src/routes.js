@@ -7,25 +7,38 @@ const UserControllers = require("./controllers/UserControllers");
 
 const routes = express.Router();
 
-routes.get("/clients/:provider_id", ClientControllers.showProductsStore);
-
-routes.post("/products", ProductContollers.store);
-routes.get("/products", ProductContollers.index);
-routes.put("/products/:product_id", ProductContollers.update);
-routes.delete("/products/:product_id", ProductContollers.delete);
+// User routes
+routes
+    .get("/users", UserControllers.index)
+    .get("/users/:user_id", UserControllers.read)
+    .post("/users", UserControllers.create)
+    .put("/users/:user_id", UserControllers.update)
+    .delete("/users/:user_id", UserControllers.delete);
 
 // Provider Routes
-routes.get("/provider/list", ProviderController.index);
-routes.get("/provider", ProviderController.read);
-routes.post("/provider", ProviderController.create);
-routes.put("/provider", ProviderController.update);
-routes.delete("/provider", ProviderController.delete);
+routes
+    .get("/providers", ProviderController.index)
+    .get("/providers/:provider_id", ProviderController.read)
+    .post("/providers", ProviderController.create)
+    .put("/providers/:provider_id", ProviderController.update)
+    .delete("/providers/:provider_id", ProviderController.delete);
 
-// User routes
-routes.get("/user/list", UserControllers.index);
-routes.get("/user", UserControllers.read);
-routes.post("/user", UserControllers.create);
-routes.put("/user", UserControllers.update);
-routes.delete("/user", UserControllers.delete);
+// Client Routes
+routes
+    .get("/clients", ClientControllers.index)
+    .get("/clients/:client_id", ClientControllers.read)
+    .post("/clients", ClientControllers.create)
+    .put("/clients/:client_id", ClientControllers.update)
+    .delete("/clients/:client_id", ClientControllers.delete)
+    .get("/client", ClientControllers.showStores)
+    .get("/client/:provider_id", ClientControllers.showProductsStore);
+
+// Product Routes
+routes
+    .get("/products", ProductContollers.index)
+    .get("/products/:product_id", ProductContollers.read)
+    .post("/products", ProductContollers.create)
+    .put("/products/:product_id", ProductContollers.update)
+    .delete("/products/:product_id", ProductContollers.delete);
 
 module.exports = routes;
