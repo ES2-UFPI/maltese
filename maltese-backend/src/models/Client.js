@@ -10,7 +10,7 @@ const ClientSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
-    createAt: {
+    createdAt: {
         type: Date,
         default: Date.now,
     },

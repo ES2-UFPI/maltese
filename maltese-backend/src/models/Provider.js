@@ -10,14 +10,16 @@ const ProviderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
-    products: [{
-        product: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product",
+    products: [
+        {
+            product: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Product",
+            },
+            quantity: Number,
         },
-        quantity: Number
-    }],
-    createAt: {
+    ],
+    createdAt: {
         type: Date,
         default: Date.now,
     },
