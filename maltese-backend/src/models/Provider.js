@@ -4,7 +4,6 @@ const ProviderSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: true,
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,

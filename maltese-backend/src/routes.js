@@ -1,11 +1,9 @@
-const express = require("express");
+const routes = require("express").Router();
 
 const ClientControllers = require("./controllers/ClientControllers");
 const ProductContollers = require("./controllers/ProductControllers");
 const ProviderController = require("./controllers/ProviderControllers");
 const UserControllers = require("./controllers/UserControllers");
-
-const routes = express.Router();
 
 // User routes
 routes
