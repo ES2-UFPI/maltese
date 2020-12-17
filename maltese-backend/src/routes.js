@@ -4,7 +4,7 @@ const ClientControllers = require("./controllers/ClientControllers");
 const ProductContollers = require("./controllers/ProductControllers");
 const ProviderController = require("./controllers/ProviderControllers");
 const UserControllers = require("./controllers/UserControllers");
-const OrderController = require('./controllers/OrderController');
+const OrderController = require("./controllers/OrderController");
 
 // User routes
 routes
@@ -20,7 +20,10 @@ routes
     .get("/providers/:provider_id", ProviderController.read)
     .post("/providers", ProviderController.create)
     .put("/providers/:provider_id", ProviderController.update)
-    .delete("/providers/:provider_id", ProviderController.delete);
+    .delete("/providers/:provider_id", ProviderController.delete)
+    .put("/providers/:provider_id/add", ProviderController.addProducts)
+    .get("/providers/:provider_id/show", ProviderController.showProducts)
+    .delete("/providers/:provider_id/remove", ProviderController.removeProduct);
 
 // Client Routes
 routes
