@@ -100,14 +100,6 @@ module.exports = {
         }
 
         const clearProducts = [...products];
-        //console.log(clearProducts);
-        /* let product = await Product.findByIdAndUpdate(
-                element.product,
-                { "providers.provider": {$ne: provider_id}},
-                { $addToSet: { providers: { provider: provider_id } } },
-                { new: true }
-            );
-            console.log(product.providers); */
 
         const provider = await Provider.findByIdAndUpdate(
             provider_id,
