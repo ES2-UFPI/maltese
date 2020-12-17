@@ -9,9 +9,9 @@ module.exports = {
     },
 
     async create(req, res) {
-        const { name, price } = req.body;
+        const { name, price, description } = req.body;
 
-        if (!name || !price) {
+        if (!name || !price || !description) {
             return res
                 .status(401)
                 .send({ error: "Invalid request parameters!" });
@@ -23,7 +23,11 @@ module.exports = {
         }
 
         // Create the provider
-        const created_product = await Product.create({ name, price });
+        const created_product = await Product.create({
+            name,
+            price,
+            description,
+        });
         if (!created_product) {
             return res.status(500).send({ error: "Failed to create product!" });
         }
@@ -44,9 +48,9 @@ module.exports = {
 
     async update(req, res) {
         const { product_id } = req.params;
-        const { name, price } = req.body;
+        const { name, price, description } = req.body;
 
-        if (!name || !price) {
+        if (!name || !price || !description) {
             return res
                 .status(401)
                 .send({ error: "Invalid request parameters!" });
@@ -54,7 +58,7 @@ module.exports = {
 
         let product = await Product.findByIdAndUpdate(
             product_id,
-            { name, price },
+            { name, price, description },
             { new: true }
         );
         if (!product) {
