@@ -20,7 +20,10 @@ routes
     .get("/providers/:provider_id", ProviderController.read)
     .post("/providers", ProviderController.create)
     .put("/providers/:provider_id", ProviderController.update)
-    .delete("/providers/:provider_id", ProviderController.delete);
+    .delete("/providers/:provider_id", ProviderController.delete)
+    .put("/providers/add/:provider_id", ProviderController.addProducts)
+    .get("/providers/show/:provider_id", ProviderController.showProducts)
+    .delete("/providers/remove/:provider_id", ProviderController.removeProduct);
 
 // Client Routes
 routes

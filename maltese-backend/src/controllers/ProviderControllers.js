@@ -1,4 +1,5 @@
 const Provider = require("../models/Provider");
+const Product = require("../models/Product");
 
 module.exports = {
     async index(req, res) {
@@ -52,7 +53,7 @@ module.exports = {
     async update(req, res) {
         // Check parameters validity
         const { provider_id } = req.params;
-        const { name, products } = req.body;
+        const { name } = req.body;
 
         if (!name) {
             return res
@@ -63,7 +64,7 @@ module.exports = {
         // Check if the registering provider exists
         let provider = await Provider.findByIdAndUpdate(
             provider_id,
-            { name, products },
+            { name },
             { new: true }
         );
         if (!provider) {
@@ -86,5 +87,59 @@ module.exports = {
         await provider.delete();
 
         return res.sendStatus(204);
+    },
+
+    async addProducts(req, res) {
+        const { provider_id } = req.params;
+        const { products } = req.body;
+
+        if (!products) {
+            return res
+                .status(401)
+                .send({ error: "Invalid request parameters!" });
+        }
+
+        const clearProducts = [...products];
+
+        const provider = await Provider.findByIdAndUpdate(
+            provider_id,
+            { $push: { products: { $each: clearProducts } } },
+            { new: true }
+        );
+
+        if (!provider) {
+            return res.status(404).send({ error: "Provider not found!" });
+        }
+
+        return res.status(200).json(provider.products);
+    },
+
+    async showProducts(req, res) {
+        const { provider_id } = req.params;
+
+        const provider = await Provider.findById(provider_id);
+        if (!provider) {
+            return res.status(404).send({ error: "Provider not found!" });
+        }
+
+        const products = provider.products;
+
+        return res.status(200).json(products);
+    },
+
+    async removeProduct(req, res) {
+        const { provider_id } = req.params;
+        const { product } = req.body;
+
+        const provider = await Provider.findByIdAndUpdate(
+            provider_id,
+            { $pull: { products: { product: product } } },
+            { new: true }
+        );
+        if (!provider) {
+            return res.status(404).send({ error: "Provider not found!" });
+        }
+
+        return res.status(200).json(provider.products);
     },
 };
