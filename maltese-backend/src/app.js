@@ -4,6 +4,7 @@ require("dotenv").config({
 
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
 
 class AppController {
     constructor() {
@@ -23,6 +24,10 @@ class AppController {
 
     middlewares() {
         this.express.use(express.json());
+        this.express.use(
+            "/files",
+            express.static(path.resolve(__dirname, "..", "uploads"))
+        );
     }
 
     routes() {

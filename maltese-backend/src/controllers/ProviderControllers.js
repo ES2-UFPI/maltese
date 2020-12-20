@@ -1,16 +1,14 @@
 const Provider = require("../models/Provider");
-const Product = require("../models/Product");
+const Order = require("../models/Order");
 
 module.exports = {
     async index(req, res) {
-        // Retrieve all registered providers
         const providers = await Provider.find();
 
         return res.status(200).json(providers);
     },
 
     async create(req, res) {
-        // Check parameters validity
         const { name, user } = req.body;
 
         if (!name || !user) {
@@ -19,13 +17,11 @@ module.exports = {
                 .send({ error: "Invalid request parameters!" });
         }
 
-        // Check if the registering provider doesn't exists
         const existing_provider = await Provider.findOne({ user });
         if (existing_provider) {
             return res.status(403).send({ error: "Provider already exists!" });
         }
 
-        // Create the provider
         const created_provider = await Provider.create({ name, user });
         if (!created_provider) {
             return res
@@ -37,10 +33,8 @@ module.exports = {
     },
 
     async read(req, res) {
-        // Check parameters validity
         const { provider_id } = req.params;
 
-        // Check if the registering provider exists
         const existing_provider = await Provider.findById(provider_id);
 
         if (!existing_provider) {
@@ -51,7 +45,6 @@ module.exports = {
     },
 
     async update(req, res) {
-        // Check parameters validity
         const { provider_id } = req.params;
         const { name } = req.body;
 
@@ -61,8 +54,7 @@ module.exports = {
                 .send({ error: "Invalid request parameters!" });
         }
 
-        // Check if the registering provider exists
-        let provider = await Provider.findByIdAndUpdate(
+        const provider = await Provider.findByIdAndUpdate(
             provider_id,
             { name },
             { new: true }
@@ -75,10 +67,9 @@ module.exports = {
     },
 
     async delete(req, res) {
-        // Check parameters validity
         const { provider_id } = req.params;
 
-        let provider = await Provider.findById(provider_id);
+        const provider = await Provider.findById(provider_id);
 
         if (!provider) {
             return res.status(404).send({ error: "Provider not found!" });
@@ -122,9 +113,7 @@ module.exports = {
             return res.status(404).send({ error: "Provider not found!" });
         }
 
-        const products = provider.products;
-
-        return res.status(200).json(products);
+        return res.status(200).json(provider.products);
     },
 
     async removeProduct(req, res) {
@@ -133,13 +122,22 @@ module.exports = {
 
         const provider = await Provider.findByIdAndUpdate(
             provider_id,
-            { $pull: { products: { product: product } } },
+            { $set: { products: { product: product, status: "archived" } } },
             { new: true }
         );
+
         if (!provider) {
             return res.status(404).send({ error: "Provider not found!" });
         }
 
         return res.status(200).json(provider.products);
+    },
+
+    async showOrders(req, res) {
+        const { provider_id } = req.params;
+
+        const orders = await Order.find({ provider: provider_id });
+
+        return res.status(200).json(orders);
     },
 };

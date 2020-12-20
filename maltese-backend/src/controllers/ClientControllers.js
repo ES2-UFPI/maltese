@@ -1,5 +1,4 @@
 const Client = require("../models/Client");
-const Provider = require("../models/Provider");
 
 module.exports = {
     async index(req, res) {
@@ -75,21 +74,5 @@ module.exports = {
         await client.delete();
 
         return res.sendStatus(204);
-    },
-
-    async showStores(req, res) {
-        const providers = await Provider.find();
-
-        return res.status(200).json(providers);
-    },
-
-    async showProductsStore(req, res) {
-        const { provider_id } = req.params;
-
-        const provider = await Provider.findById(provider_id);
-
-        const allProducts = provider.products;
-
-        return res.status(200).json(allProducts);
     },
 };
