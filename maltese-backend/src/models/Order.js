@@ -3,17 +3,26 @@ const mongoose = require("mongoose");
 const OrderSchema = new mongoose.Schema({
     client: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Client"
+        ref: "Client",
     },
     provider: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Provider"
+        ref: "Provider",
     },
-    items: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product"
-    }],
-    createAt: {
+    items: [
+        {
+            product: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Product",
+            },
+            quantity: Number,
+        },
+    ],
+    status: {
+        type: Number,
+        required: true,
+    },
+    createdAt: {
         type: Date,
         default: Date.now,
     },

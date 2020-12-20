@@ -16,6 +16,7 @@ const ProviderSchema = new mongoose.Schema({
                 ref: "Product",
             },
             quantity: Number,
+            status: String
         },
     ],
     createdAt: {

@@ -1,4 +1,6 @@
 const Product = require("../models/Product");
+const fs = require("fs");
+const path = require("path");
 
 module.exports = {
     //Read
@@ -10,8 +12,9 @@ module.exports = {
 
     async create(req, res) {
         const { name, price, description } = req.body;
+        const { filename } = req.file;
 
-        if (!name || !price || !description) {
+        if (!name || !price || !description || !filename) {
             return res
                 .status(401)
                 .send({ error: "Invalid request parameters!" });
@@ -27,6 +30,7 @@ module.exports = {
             name,
             price,
             description,
+            image: filename,
         });
         if (!created_product) {
             return res.status(500).send({ error: "Failed to create product!" });
@@ -71,10 +75,25 @@ module.exports = {
     async delete(req, res) {
         const { product_id } = req.params;
 
-        let product = await Product.findById(product_id);
+        const product = await Product.findById(product_id);
 
         if (!product)
             return res.status(404).json({ error: "Product not found!" });
+
+        const imagePath = path.resolve(
+            __dirname,
+            "..",
+            "..",
+            "uploads",
+            product.image
+        );
+        fs.unlink(imagePath, (err) => {
+            if (err) {
+                console.log("Failed to delete: " + err);
+            } else {
+                console.log("Successfully deleted");
+            }
+        });
 
         await product.delete();
 
