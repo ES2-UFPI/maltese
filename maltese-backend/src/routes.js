@@ -7,8 +7,8 @@ const ProductContollers = require("./controllers/ProductControllers");
 const ProviderController = require("./controllers/ProviderControllers");
 const UserControllers = require("./controllers/UserControllers");
 const OrderController = require("./controllers/OrderController");
-const DelivererController = require("./controllers/DelivererController");
-const DeliveryController = require("./controllers/DeliveryController");
+const DelivererController = require("./controllers/DeliverersController");
+const DeliveriesController = require("./controllers/DeliveriesController");
 const ConfirmationController = require("./controllers/ConfirmationController");
 
 const upload = multer(uploadConfig);
@@ -65,19 +65,19 @@ routes
 
 // Deliverer CRUD routes
 routes
-    .get("/deliverer/all", DelivererController.index)
-    .get("/deliverer", DelivererController.read)
-    .post("/deliverer", DelivererController.create)
-    .put("/deliverer", DelivererController.update)
-    .delete("deliverer", DelivererController.delete);
+    .get("/deliverers/all", DelivererController.index)
+    .get("/deliverers", DelivererController.read)
+    .post("/deliverers", DelivererController.create)
+    .put("/deliverers", DelivererController.update)
+    .delete("deliverers", DelivererController.delete);
 
 // Delivery CRUD routes
 routes
-    .get("/delivery/all", DeliveryController.index)
-    .get("/delivery", DeliveryController.read)
-    .post("/delivery", DeliveryController.create)
-    .put("/delivery", DeliveryController.update)
-    .delete("delivery", DeliveryController.delete);
+    .get("/deliveries/all", DeliveriesController.index)
+    .get("/deliveries", DeliveriesController.read)
+    .post("/deliveries", DeliveriesController.create)
+    .put("/deliveries", DeliveriesController.update)
+    .delete("deliveries", DeliveriesController.delete);
 
 routes
     .post("/confirm", ConfirmationController.confirm);

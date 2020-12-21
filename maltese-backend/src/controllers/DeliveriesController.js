@@ -4,7 +4,7 @@ const Deliverer = require("../models/Deliverer");
 const Order = require("../models/Order");
 const Delivery = require("../models/Delivery");
 
-// Processes
+// Processes Imports
 const DeliveryProcessExample = require("./DeliveryProcesses/DeliveryProcessExample")
 
 module.exports = {
@@ -83,15 +83,15 @@ module.exports = {
     },
 
     async delete(req, res) {
-        const {client_id, deliverer_id, order_id} = req.body;
+        const {client_id, order_id} = req.body;
 
         // Check existing
-        const existingDelivery = await Delivery.findOne({client_id, deliverer_id, order_id});
+        const existingDelivery = await Delivery.findOne({client_id, order_id});
         if (!existingDelivery) {
             res.status(403).send({error: "Delivery doesn't exists!"});
         }
 
-        const deletedDeliveries = await Delivery.deleteMany({client_id, deliverer_id, order_id});
+        const deletedDeliveries = await Delivery.deleteMany({client_id, order_id});
 
         res.status(200).send(deletedDeliveries);
     },
