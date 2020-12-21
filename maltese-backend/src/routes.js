@@ -7,6 +7,9 @@ const ProductContollers = require("./controllers/ProductControllers");
 const ProviderController = require("./controllers/ProviderControllers");
 const UserControllers = require("./controllers/UserControllers");
 const OrderController = require("./controllers/OrderController");
+const DelivererController = require("./controllers/DeliverersController");
+const DeliveriesController = require("./controllers/DeliveriesController");
+const ConfirmationController = require("./controllers/ConfirmationController");
 
 const upload = multer(uploadConfig);
 
@@ -59,5 +62,24 @@ routes
     .post("/orders", OrderController.create)
     .put("/orders/:order_id", OrderController.update)
     .delete("/orders/:order_id", OrderController.delete);
+
+// Deliverer CRUD routes
+routes
+    .get("/deliverers/all", DelivererController.index)
+    .get("/deliverers", DelivererController.read)
+    .post("/deliverers", DelivererController.create)
+    .put("/deliverers", DelivererController.update)
+    .delete("deliverers", DelivererController.delete);
+
+// Delivery CRUD routes
+routes
+    .get("/deliveries/all", DeliveriesController.index)
+    .get("/deliveries", DeliveriesController.read)
+    .post("/deliveries", DeliveriesController.create)
+    .put("/deliveries", DeliveriesController.update)
+    .delete("deliveries", DeliveriesController.delete);
+
+routes
+    .post("/confirm", ConfirmationController.confirm);
 
 module.exports = routes;
