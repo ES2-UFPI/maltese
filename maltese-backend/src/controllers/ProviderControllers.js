@@ -89,7 +89,6 @@ module.exports = {
                 .status(401)
                 .send({ error: "Invalid request parameters!" });
         }
-
         const clearProducts = [...products];
 
         const provider = await Provider.findByIdAndUpdate(
@@ -113,6 +112,8 @@ module.exports = {
             return res.status(404).send({ error: "Provider not found!" });
         }
 
+        await provider.populate("products.product").execPopulate();
+
         return res.status(200).json(provider.products);
     },
 
@@ -122,9 +123,13 @@ module.exports = {
 
         const provider = await Provider.findByIdAndUpdate(
             provider_id,
-            { $set: { products: { product: product, status: "archived" } } },
+            { $pull: { products: { product: product } } },
             { new: true }
         );
+
+        await provider.update({
+            $push: { products: { product: product, status: "archived" } },
+        });
 
         if (!provider) {
             return res.status(404).send({ error: "Provider not found!" });

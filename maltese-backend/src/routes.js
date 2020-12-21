@@ -77,7 +77,7 @@ routes
     .get("/deliveries", DeliveriesController.read)
     .post("/deliveries", DeliveriesController.create)
     .put("/deliveries", DeliveriesController.update)
-    .delete("deliveries", DeliveriesController.delete);
+    .delete("/deliveries", DeliveriesController.delete);
 
 routes
     .post("/confirm", ConfirmationController.confirm);
