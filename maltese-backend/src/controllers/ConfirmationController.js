@@ -1,6 +1,6 @@
 const User = require("../models/User")
 const Delivery = require("../models/Delivery")
-const DeliveryController = require("./DeliveryController")
+const DeliveryController = require("./DeliveriesController")
 
 module.exports = {
     async confirm(req, res) {
