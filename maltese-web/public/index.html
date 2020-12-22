@@ -30,12 +30,27 @@
   <div id="root"></div>
   <script>
     if ('geolocation' in navigator) {
+      // api-------------------------------------------------------------------
+      // http://api.positionstack.com/v1/reverse?access_key=2b9e28d4795a3aff69fb0f3dade98cf5&query=${local.latitude},${local.longitude}&limit=1
+      // https://api.opencagedata.com/geocode/v1/json?q=${local.latitude}+${local.longitude}&key=d4f531e52bde4035b27d83f94c9f8eff
+      // https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=AIzaSyADrS18SdnCvBnA5aWxaqzd0kR-SouUfEs
+      // ------------------------------------------------------------------------
       navigator.geolocation.getCurrentPosition(
         function (position) {
-          console.log("latitude: " + position.coords.latitude),
-            console.log("longitude: " + position.coords.longitude)
+          console.log("latitude: " + position.coords.latitude)
+          console.log("longitude: " + position.coords.longitude)
+          const local = position.coords
+          fetch(`http://api.positionstack.com/v1/reverse?access_key=2b9e28d4795a3aff69fb0f3dade98cf5&query=${local.latitude},${local.longitude}&limit=1`)
+            .then(response => response.json())
+            .then(resp => {
+              const endereco = resp.data[0].label
+              console.log(endereco)
+              document.body.insertAdjacentHTML("beforeend", `<p>Endereço: ${resp.data[0].label}</p>`)
+            })
+          // .catch(err => console.warn(err.message));
         },
-        function (error) { console.log(error) }
+        function (error) { console.log(error) },
+        { enableHighAccuracy: true, timeout: 12000, maximumAge: 1000 }
       )
     }
   </script>
