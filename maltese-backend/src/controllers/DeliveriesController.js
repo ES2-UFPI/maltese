@@ -9,8 +9,8 @@ const DeliveryProcessExample = require("./DeliveryProcesses/DeliveryProcessExamp
 
 module.exports = {
     async index(req, res) {
-        const deliveries = Delivery.find();
-        return deliveries;
+        const deliveries = await Delivery.find();
+        return res.status(200).json(deliveries);
     },
 
     async create(req, res) {
