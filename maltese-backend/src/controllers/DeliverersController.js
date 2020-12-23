@@ -3,8 +3,8 @@ const Deliverer = require("../models/Deliverer");
 
 module.exports = {
     async index(req, res) {
-        const deliverers = Deliverer.find();
-        return deliverers;
+        const deliverers = await Deliverer.find();
+        return res.status(200).json(deliverers);
     },
 
     async create(req, res) {
