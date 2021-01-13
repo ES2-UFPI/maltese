@@ -6,4 +6,4 @@ before_script: cd maltese-backend
 branches:
   only:
   - dev
-  - -jpedrodsp-patch-1
+  - jpedrodsp-patch-1
