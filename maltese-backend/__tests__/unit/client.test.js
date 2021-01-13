@@ -217,10 +217,12 @@ describe("ClientDelete", () => {
             password: "123456",
         });
 
-        const client = await Client.create({ name: "Fulano", user: user._id });
-
+        // Check if exists a client with that name. If so, just fetch it.
+        const client = await Client.findOne({login: user.login});
+        if (!client) {
+            client = await Client.create({ name: "Fulano", user: user._id });
+        }
         const response = await request(app).delete(`/clients/${client._id}`);
-
         expect(response.status).toBe(204);
     });
 });
