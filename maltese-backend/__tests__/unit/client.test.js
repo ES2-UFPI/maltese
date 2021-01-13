@@ -218,7 +218,7 @@ describe("ClientDelete", () => {
         });
 
         // Check if exists a client with that name. If so, just fetch it.
-        const client = await Client.findOne({login: user.login});
+        var client = await Client.findOne({login: user.login});
         if (!client) {
             client = await Client.create({ name: "Fulano", user: user._id });
         }
