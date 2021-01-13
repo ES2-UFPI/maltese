@@ -212,13 +212,18 @@ describe("ClientDelete", () => {
     });
 
     it("should delete a client", async () => {
-        const user = await User.create({
-            login: "fulano@example.com",
-            password: "123456",
-        });
+        const login_string = "fulano@example.com";
+        const passwd_string = "123456";
+        var user = await User.findOne({login: login_string});
+        if (!user) {
+            user = await User.create({
+                login: login_string,
+                password: passwd_string,
+            });
+        }
 
-        // Check if exists a client with that name. If so, just fetch it.
-        var client = await Client.findOne({login: user.login});
+        // Check if exists a client with that name. If not, delete it.
+        var client = await Client.findOne({user: user._id});
         if (!client) {
             client = await Client.create({ name: "Fulano", user: user._id });
         }
