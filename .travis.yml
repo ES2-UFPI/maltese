@@ -1,3 +1,14 @@
 language: node_js
 node_js:
-  - 10
+  - node
+  - lts/*
+cache:
+  directories:
+    - ~/.npm
+before_script:
+  - cd maltese-backend && npm install -g npm@latest
+script:
+  - npm ci
+branches:
+  only:
+  - dev
