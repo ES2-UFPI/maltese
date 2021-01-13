@@ -16,7 +16,7 @@ describe("ProductPost", () => {
     it("should not create a product without name", async () => {
         const response = await request(app)
             .post("/products")
-            .send({ price: 50 });
+            .send({ price: 50, description: "foo", filename: "default.jpg" });
 
         expect(response.status).toBe(401);
     });
@@ -24,7 +24,7 @@ describe("ProductPost", () => {
     it("should not create a product without price", async () => {
         const response = await request(app)
             .post("/products")
-            .send({ name: "Cerveja" });
+            .send({ name: "Cerveja", description: "foo", filename: "default.jpg" });
 
         expect(response.status).toBe(401);
     });
@@ -38,7 +38,7 @@ describe("ProductPost", () => {
     it("should not create a product with name invalid", async () => {
         const response = await request(app)
             .post("/products")
-            .send({ name: "", price: 50 });
+            .send({ name: "", price: 50, description: "foo", filename: "default.jpg" });
 
         expect(response.status).toBe(401);
     });
@@ -46,7 +46,7 @@ describe("ProductPost", () => {
     it("should not create a product with price invalid", async () => {
         const response = await request(app)
             .post("/products")
-            .send({ name: "Cerveja", user: "" });
+            .send({ name: "Cerveja", description: "foo", filename: "default.jpg" });
 
         expect(response.status).toBe(401);
     });
@@ -54,17 +54,17 @@ describe("ProductPost", () => {
     it("should not create a product with name and price invalid", async () => {
         const response = await request(app)
             .post("/products")
-            .send({ name: "", price: "" });
+            .send({ name: "", price: "", description: "foo", filename: "default.jpg" });
 
         expect(response.status).toBe(401);
     });
 
     it("should not create a product that already exists", async () => {
-        await Product.create({ name: "Cerveja", price: 10 });
+        await Product.create({ name: "Cerveja", price: 10, description: "foo", filename: "default.jpg" });
 
         const response = await request(app)
             .post("/products")
-            .send({ name: "Cerveja", price: 5 });
+            .send({ name: "Cerveja", price: 5, description: "foo", filename: "default.jpg" });
 
         expect(response.status).toBe(403);
     });
@@ -72,7 +72,7 @@ describe("ProductPost", () => {
     it("should create a product", async () => {
         const response = await request(app)
             .post("/products")
-            .send({ name: "Cerveja", price: 10 });
+            .send({ name: "Cerveja", price: 10, description: "foo", filename: "default.jpg" });
 
         expect(response.status).toBe(201);
     });
@@ -96,7 +96,7 @@ describe("ProductGet", () => {
     });
 
     it("should show a specific product", async () => {
-        const product = await Product.create({ name: "Cerveja", price: 10 });
+        const product = await Product.create({ name: "Cerveja", price: 10, description: "foo", filename: "default.jpg" });
 
         const response = await request(app).get(`/products/${product._id}`);
 
@@ -104,8 +104,8 @@ describe("ProductGet", () => {
     });
 
     it("should show all products", async () => {
-        await Product.create({ name: "Cerveja", price: 10 });
-        await Product.create({ name: "Vodka", price: 100 });
+        await Product.create({ name: "Cerveja", price: 10, description: "foo", filename: "default.jpg" });
+        await Product.create({ name: "Vodka", price: 100, description: "foo", filename: "default.jpg" });
 
         const response = await request(app).get("/products");
 
@@ -123,7 +123,7 @@ describe("ProductUpdate", () => {
     });
 
     it("should not update a product without name", async () => {
-        const product = await Product.create({ name: "Cerveja", price: 10 });
+        const product = await Product.create({ name: "Cerveja", price: 10, description: "foo", filename: "default.jpg" });
 
         const response = await request(app)
             .put(`/products/${product._id}`)
@@ -133,11 +133,11 @@ describe("ProductUpdate", () => {
     });
 
     it("should not update a product without price", async () => {
-        const product = await Product.create({ name: "Cerveja", price: 10 });
+        const product = await Product.create({ name: "Cerveja", price: 10, description: "foo", filename: "default.jpg" });
 
         const response = await request(app)
             .put(`/products/${product._id}`)
-            .send({ name: "CERVEJA" });
+            .send({ name: "CERVEJA" , description: "foo", filename: "default.jpg"});
 
         expect(response.status).toBe(401);
     });
@@ -145,17 +145,17 @@ describe("ProductUpdate", () => {
     it("should not update a product that not exists", async () => {
         const response = await request(app)
             .put(`/providers/6fd94d2bfe3977307c7b5aef`)
-            .send({ name: "Cerveja", price: 15 });
+            .send({ name: "Cerveja", price: 15, description: "foo", filename: "default.jpg" });
 
         expect(response.status).toBe(404);
     });
 
     it("should update a product", async () => {
-        const product = await Product.create({ name: "Cerveja", price: 10 });
+        const product = await Product.create({ name: "Cerveja", price: 10, description: "foo", filename: "default.jpg" });
 
         const response = await request(app)
             .put(`/products/${product._id}`)
-            .send({ name: "CERVEJA", price: 15 });
+            .send({ name: "Cerveja", price: 20, description: "foobar", filename: "default.jpg" });
 
         expect(response.status).toBe(200);
     });
@@ -179,12 +179,20 @@ describe("ProductDelete", () => {
     });
 
     it("should delete a product", async () => {
-        const product = await Product.create({ name: "Cerveja", price: 10 });
-
-        const response = await request(app).delete(`/products/${product._id}`);
+        const product = await Product.create({ name: "Cerveja", price: 10, description: "foo", filename: "default.jpg" });
+        const url = `/products/${product._id}`;
+        console.log(url);
+        const response = await request(app).delete(url);
 
         expect(response.status).toBe(204);
     });
+    
+    // Increment with Image Filename tests
+        // Send image: ok
+        // Send empty image: fail
+    // Increment with Description tests
+        // Send with description: ok
+        // Send without description: fail
 });
 
 afterAll(() => {
