@@ -12,8 +12,15 @@ module.exports = {
 
     async create(req, res) {
         const { name, price, description } = req.body;
-        const { filename } = req.file;
-
+        if (req.file)
+        {
+            const { filename } = req.file;
+        }
+        else
+        {
+           const filename = undefined;
+        }
+       
         if (!name || !price || !description || !filename) {
             return res
                 .status(401)
