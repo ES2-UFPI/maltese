@@ -3,3 +3,6 @@ node_js:
   - node
   - lts/*
 before_script: cd maltese-backend
+branches:
+  only:
+  - dev
