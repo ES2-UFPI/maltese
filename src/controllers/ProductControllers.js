@@ -101,7 +101,6 @@ module.exports = {
                 }
             });
         }
-
         await product.delete();
 
         return res.sendStatus(204);

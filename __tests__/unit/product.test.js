@@ -213,6 +213,13 @@ describe("ProductDelete", () => {
 
         expect(response.status).toBe(204);
     });
+    
+    // Increment with Image Filename tests
+        // Send image: ok
+        // Send empty image: fail
+    // Increment with Description tests
+        // Send with description: ok
+        // Send without description: fail
 });
 
 afterAll(() => {
