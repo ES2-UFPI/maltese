@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - node
+  - lts/*
+before_script: cd maltese-backend ; npm install
+branches:
+  only:
+  - dev
+  - jpedrodsp-patch-1

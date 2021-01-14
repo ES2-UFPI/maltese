@@ -11,9 +11,12 @@ module.exports = {
     },
 
     async create(req, res) {
-        const { name, price, description } = req.body;
-        const { filename } = req.file;
-
+        const { name, price, description, filename } = req.body;
+        if (req.file)
+        {
+            filename = req.file;
+        }
+       
         if (!name || !price || !description || !filename) {
             return res
                 .status(401)
@@ -80,21 +83,25 @@ module.exports = {
         if (!product)
             return res.status(404).json({ error: "Product not found!" });
 
-        const imagePath = path.resolve(
-            __dirname,
-            "..",
-            "..",
-            "uploads",
-            product.image
-        );
-        fs.unlink(imagePath, (err) => {
-            if (err) {
-                console.log("Failed to delete: " + err);
-            } else {
-                console.log("Successfully deleted");
-            }
-        });
-
+        console.log(product);
+        if (product.image) {
+            console.log("Product has image... " + product.image)
+            const imagePath = path.resolve(
+                __dirname,
+                "..",
+                "..",
+                "uploads",
+                product.image
+            );
+            console.log("imagePath: " + imagePath);
+            fs.unlink(imagePath, (err) => {
+                if (err) {
+                    console.log("Failed to delete: " + err);
+                } else {
+                    console.log("Successfully deleted");
+                }
+            });
+        }
         await product.delete();
 
         return res.sendStatus(204);
