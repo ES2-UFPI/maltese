@@ -45,7 +45,9 @@ routes
         "/providers/:provider_id/removeProduct",
         ProviderControllers.removeProduct
     )
-    .get("/providers/:provider_id/showOrders", ProviderControllers.showOrders);
+    .get("/providers/:provider_id/showOrders", ProviderControllers.showOrders)
+    .put("/providers/products/", ProviderControllers.updateProductQuantity)
+    .get("/providers/:provider_id/showProducts/:product_id", ProviderControllers.getProductInfo)
 
 // Deliveryman Routes
 routes

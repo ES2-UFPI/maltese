@@ -145,4 +145,55 @@ module.exports = {
 
         return res.status(200).json(orders);
     },
+    async getProductInfo(req, res) {
+        // Retrieve and validate parameters
+        const { provider_id, product_id } = req.params;
+        if (!provider_id || !product_id ) {
+            return res.status(400).send({ error: "Missing parameters!", parameters: {provider_id, product_id} });
+        }
+        // Find provider and validate
+        const provider = await Provider.findById(provider_id);
+        if (!provider) {
+            return res.status(404).send({ error: "Provider not found!", parameters: {provider_id, product_id} });
+        }
+        // Find product(s) on provider
+        let productList = provider.products;
+        productList.map((metaproduct) => {
+            if (metaproduct.product._id == product_id) {
+                return res.status(200).send(metaproduct);
+            }
+        });
+        return res.status(404).send({ error: "Product not found!", parameters: {provider_id, product_id} });;
+
+    },
+
+    async updateProductQuantity(req, res) {
+        // Retrieve and validate parameters
+        const { provider_id, product_id, quantity } = req.body;
+        if (!provider_id || !product_id || !quantity) {
+            return res.status(400).send({ error: "Missing parameters!", parameters: {provider_id, product_id, quantity} });
+        }
+        // Find provider and validate
+        const provider = await Provider.findById(provider_id);
+        if (!provider) {
+            return res.status(404).send({ error: "Provider not found!", parameters: {provider_id, product_id, quantity} });
+        }
+        // Find product(s) on provider
+        let found = false;
+        let productList = provider.products;
+        productList.map((metaproduct) => {
+            if (metaproduct.product._id == product_id) {
+                metaproduct.quantity = quantity;
+                found = true;
+            }
+        });
+        // Return 200 if found any product, 404 if none
+        if (found) {
+            const updatedProvider = Provider.findByIdAndUpdate(provider_id, {products: productList});
+            return res.status(200).send(updatedProvider);
+        } else {
+            return res.status(404).send({ error: "Product not found!", parameters: {provider_id, product_id, quantity} });
+        }
+
+    }
 };
