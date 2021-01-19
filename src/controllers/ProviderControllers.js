@@ -96,11 +96,13 @@ module.exports = {
             return res.status(403).send({ error: "Product already exists!" });
         }
 
+        const clearProviders = [];
+        clearProviders.push({ provider: provider_id });
         const product = await Product.create({
             name,
             price,
             description,
-            providers: { $push: { provider: provider_id } },
+            providers: clearProviders,
         });
         if (!product) {
             return res.status(500).send({ error: "Failed to create product!" });
