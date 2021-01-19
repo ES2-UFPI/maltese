@@ -1,4 +1,5 @@
 const Client = require("../models/Client");
+const Product = require("../models/Product");
 
 module.exports = {
     async index(req, res) {
@@ -73,5 +74,18 @@ module.exports = {
         await client.delete();
 
         return res.sendStatus(204);
+    },
+
+    async search(req, res) {
+        function capitalizeName(name) {
+            return name.replace(/\b(\w)/g, (s) => s.toUpperCase());
+        }
+
+        const { name } = req.params;
+        const clearName = capitalizeName(name.toLowerCase());
+
+        const products = await Product.find({ name: { $regex: clearName } });
+
+        return res.status(200).json(products);
     },
 };
