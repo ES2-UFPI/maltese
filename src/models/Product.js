@@ -13,6 +13,14 @@ const ProductSchema = new mongoose.Schema(
         },
         description: String,
         image: String,
+        providers: [
+            {
+                provider: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Provider",
+                },
+            },
+        ],
         createdAt: {
             type: Date,
             default: Date.now,

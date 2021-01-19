@@ -27,7 +27,8 @@ routes
     .get("/clients/:client_id", ClientControllers.read)
     .post("/clients", ClientControllers.create)
     .put("/clients/:client_id", ClientControllers.update)
-    .delete("/clients/:client_id", ClientControllers.delete);
+    .delete("/clients/:client_id", ClientControllers.delete)
+    .get("/clients/:cliend_id/search/:name", ClientControllers.search);
 
 // Provider Routes
 routes
@@ -36,7 +37,7 @@ routes
     .post("/providers", ProviderControllers.create)
     .put("/providers/:provider_id", ProviderControllers.update)
     .delete("/providers/:provider_id", ProviderControllers.delete)
-    .put("/providers/:provider_id/addProducts", ProviderControllers.addProducts)
+    .post("/providers/:provider_id/addProducts", ProviderControllers.addProducts)
     .get(
         "/providers/:provider_id/showProducts",
         ProviderControllers.showProducts
