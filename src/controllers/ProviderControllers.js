@@ -151,6 +151,42 @@ module.exports = {
         return res.status(200).json(provider.products);
     },
 
+    async removeProductById(req, res) {
+        const { provider_id, product_id } = req.params;
+        if (!provider_id || !product_id ) {
+            res.status(401).send({ error: "Invalid request parameters!", provider_id, product_id});
+        }
+        // Find provider
+        const provider = await Provider.findById(provider_id);
+        if (!provider) {
+            return res.status(404).send({ error: "Provider not found!", parameters: { provider_id } });
+        }
+        // Find product
+        const product = await Product.findById(product_id);
+        if (!product) {
+            return res.status(404).send({ error: "Product not found!", parameters: { product_id } });
+        }
+
+        // Update provider's product active status
+        let updatedItem = null;
+        console.log(product_id);
+        let productList = provider.products;
+        for (const item of productList) {
+            console.log(`${item.product._id} ?= ${product_id}`);
+            if (item.product._id == product_id) {
+                item.status = "archived";       
+                updatedItem = await provider.save( {isNew: false} );
+                console.log(updatedItem);
+            }
+        }
+        if (!updatedItem) {
+            return res.status(500).send({error: "Failed to update product status"});            
+        }
+
+        return res.status(200).send(updatedItem);
+
+    },
+
     async showOrders(req, res) {
         const { provider_id } = req.params;
 
