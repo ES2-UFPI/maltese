@@ -1,5 +1,6 @@
 const Client = require("../models/Client");
 const Product = require("../models/Product");
+const Order = require("../models/Order");
 
 module.exports = {
     async index(req, res) {
@@ -87,5 +88,27 @@ module.exports = {
         const products = await Product.find({ name: { $regex: clearName } });
 
         return res.status(200).json(products);
+    },
+
+    async history(req, res) {
+        const { client_id } = req.params;
+
+        const orders = await Order.find({ client: client_id }).populate({
+            path: "items.product",
+        });
+
+        const finishedOrders = [];
+        orders.map((order) => {
+            if (order.status === 3 || order.status === -1) {
+                finishedOrders.push(order);
+            }
+        });
+
+        function recenteParaMaisAntigo(a, b) {
+            return b.createdAt - a.createdAt;
+        }
+        finishedOrders.sort(recenteParaMaisAntigo);
+
+        return res.status(200).json(finishedOrders);
     },
 };
