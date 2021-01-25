@@ -79,4 +79,30 @@ module.exports = {
 
         return res.sendStatus(204);
     },
+
+    async history(req, res) {
+        const { deliveryman_id } = req.params;
+
+        const deliveries = await Delivery.find({
+            deliveryman: deliveryman_id,
+        }).populate({
+            path: "order",
+            model: "Order",
+            populate: { path: "items.product" },
+        });
+
+        const finishedDeliveries = [];
+        deliveries.map((deliverie) => {
+            if (deliverie.status === 1 || deliverie.status === -1) {
+                finishedDeliveries.push(deliverie);
+            }
+        });
+
+        function recenteParaMaisAntigo(a, b) {
+            return b.createdAt - a.createdAt;
+        }
+        finishedDeliveries.sort(recenteParaMaisAntigo);
+
+        return res.status(200).json(finishedDeliveries);
+    },
 };
