@@ -67,7 +67,8 @@ routes
     .get("/products/:product_id", ProductContollers.read)
     .post("/products", upload.single("image"), ProductContollers.create)
     .put("/products/:product_id", ProductContollers.update)
-    .delete("/products/:product_id", ProductContollers.delete);
+    .delete("/products/:product_id", ProductContollers.delete)
+    .get("/deliverymen/:deliveryman_id/history", DeliverymanControllers.history);
 
 // Order Routes
 routes
