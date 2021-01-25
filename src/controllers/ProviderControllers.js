@@ -323,4 +323,26 @@ module.exports = {
 
         return res.status(200).send(updatedItem);
     },
+
+    async history(req, res) {
+        const { provider_id } = req.params;
+
+        const orders = await Order.find({ provider: provider_id }).populate({
+            path: "items.product",
+        });
+
+        const finishedOrders = [];
+        orders.map((order) => {
+            if (order.status === 3 || order.status === -1) {
+                finishedOrders.push(order);
+            }
+        });
+
+        function recenteParaMaisAntigo(a, b) {
+            return b.createdAt - a.createdAt;
+        }
+        finishedOrders.sort(recenteParaMaisAntigo);
+
+        return res.status(200).json(finishedOrders);
+    },
 };
