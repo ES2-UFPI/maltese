@@ -153,18 +153,32 @@ module.exports = {
 
     async removeProductById(req, res) {
         const { provider_id, product_id } = req.params;
-        if (!provider_id || !product_id ) {
-            res.status(401).send({ error: "Invalid request parameters!", provider_id, product_id});
+        if (!provider_id || !product_id) {
+            res.status(401).send({
+                error: "Invalid request parameters!",
+                provider_id,
+                product_id,
+            });
         }
         // Find provider
         const provider = await Provider.findById(provider_id);
         if (!provider) {
-            return res.status(404).send({ error: "Provider not found!", parameters: { provider_id } });
+            return res
+                .status(404)
+                .send({
+                    error: "Provider not found!",
+                    parameters: { provider_id },
+                });
         }
         // Find product
         const product = await Product.findById(product_id);
         if (!product) {
-            return res.status(404).send({ error: "Product not found!", parameters: { product_id } });
+            return res
+                .status(404)
+                .send({
+                    error: "Product not found!",
+                    parameters: { product_id },
+                });
         }
 
         // Update provider's product active status
@@ -174,17 +188,18 @@ module.exports = {
         for (const item of productList) {
             console.log(`${item.product._id} ?= ${product_id}`);
             if (item.product._id == product_id) {
-                item.status = "archived";       
-                updatedItem = await provider.save( {isNew: false} );
+                item.status = "archived";
+                updatedItem = await provider.save({ isNew: false });
                 console.log(updatedItem);
             }
         }
         if (!updatedItem) {
-            return res.status(500).send({error: "Failed to update product status"});            
+            return res
+                .status(500)
+                .send({ error: "Failed to update product status" });
         }
 
         return res.status(200).send(updatedItem);
-
     },
 
     async showOrders(req, res) {
@@ -194,16 +209,27 @@ module.exports = {
 
         return res.status(200).json(orders);
     },
+
     async getProductInfo(req, res) {
         // Retrieve and validate parameters
         const { provider_id, product_id } = req.params;
         if (!provider_id || !product_id) {
-            return res.status(400).send({ error: "Missing parameters!", parameters: { provider_id, product_id } });
+            return res
+                .status(400)
+                .send({
+                    error: "Missing parameters!",
+                    parameters: { provider_id, product_id },
+                });
         }
         // Find provider and validate
         const provider = await Provider.findById(provider_id);
         if (!provider) {
-            return res.status(404).send({ error: "Provider not found!", parameters: { provider_id, product_id } });
+            return res
+                .status(404)
+                .send({
+                    error: "Provider not found!",
+                    parameters: { provider_id, product_id },
+                });
         }
         // Find product(s) on provider
         let productList = provider.products;
@@ -212,33 +238,69 @@ module.exports = {
                 return res.status(200).send(metaproduct);
             }
         });
-        return res.status(404).send({ error: "Product not found!", parameters: { provider_id, product_id } });;
-
+        return res
+            .status(404)
+            .send({
+                error: "Product not found!",
+                parameters: { provider_id, product_id },
+            });
     },
 
     async updateProviderProduct(req, res) {
-
         // Retrieve and validate parameters
         const { product_id, provider_id } = req.params;
         const { name, price, description, quantity } = req.body;
-        if (!provider_id || !product_id || !quantity || !name || !price || !description) {
-            return res.status(400).send({ error: "Missing parameters!", parameters: { provider_id, product_id, quantity, name, price, description } });
+        if (
+            !provider_id ||
+            !product_id ||
+            !quantity ||
+            !name ||
+            !price ||
+            !description
+        ) {
+            return res
+                .status(400)
+                .send({
+                    error: "Missing parameters!",
+                    parameters: {
+                        provider_id,
+                        product_id,
+                        quantity,
+                        name,
+                        price,
+                        description,
+                    },
+                });
         }
         // Find provider
         const provider = await Provider.findById(provider_id);
         if (!provider) {
-            return res.status(404).send({ error: "Provider not found!", parameters: { provider_id } });
+            return res
+                .status(404)
+                .send({
+                    error: "Provider not found!",
+                    parameters: { provider_id },
+                });
         }
         // Find product
         const product = await Product.findById(product_id);
         if (!product) {
-            return res.status(404).send({ error: "Product not found!", parameters: { product_id } });
+            return res
+                .status(404)
+                .send({
+                    error: "Product not found!",
+                    parameters: { product_id },
+                });
         }
 
         // Update product info
-        const updatedProduct = await product.update({name, price, description});
+        const updatedProduct = await product.update({
+            name,
+            price,
+            description,
+        });
         if (!updatedProduct) {
-            return res.status(500).send({error: "Failed to update product"});            
+            return res.status(500).send({ error: "Failed to update product" });
         }
 
         // Update provider's product quantity
@@ -248,15 +310,17 @@ module.exports = {
         for (const item of productList) {
             console.log(`${item.product._id} ?= ${product_id}`);
             if (item.product._id == product_id) {
-                item.quantity = quantity;       
-                updatedItem = await provider.save( {isNew: false} );
+                item.quantity = quantity;
+                updatedItem = await provider.save({ isNew: false });
                 console.log(updatedItem);
             }
         }
         if (!updatedItem) {
-            return res.status(500).send({error: "Failed to update quantity counter"});            
+            return res
+                .status(500)
+                .send({ error: "Failed to update quantity counter" });
         }
 
         return res.status(200).send(updatedItem);
-    }
+    },
 };

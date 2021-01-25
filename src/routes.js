@@ -28,7 +28,8 @@ routes
     .post("/clients", ClientControllers.create)
     .put("/clients/:client_id", ClientControllers.update)
     .delete("/clients/:client_id", ClientControllers.delete)
-    .get("/clients/:cliend_id/search/:name", ClientControllers.search);
+    .get("/clients/:cliend_id/search/:name", ClientControllers.search)
+    .get("/clients/:client_id/history", ClientControllers.history);
 
 // Provider Routes
 routes

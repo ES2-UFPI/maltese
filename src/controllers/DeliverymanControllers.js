@@ -1,4 +1,5 @@
 const Deliveryman = require("../models/Deliveryman");
+const Delivery = require("../models/Delivery");
 
 module.exports = {
     async index(req, res) {
@@ -18,12 +19,16 @@ module.exports = {
 
         const existing_deliveryman = await Deliveryman.findOne({ user });
         if (existing_deliveryman) {
-            return res.status(403).send({ error: "Deliveryman already exists!" });
+            return res
+                .status(403)
+                .send({ error: "Deliveryman already exists!" });
         }
 
         const deliveryman = await Deliveryman.create({ name, user });
         if (!deliveryman) {
-            return res.status(500).send({ error: "Failed to create Deliveryman!" });
+            return res
+                .status(500)
+                .send({ error: "Failed to create Deliveryman!" });
         }
 
         return res.status(201).json(deliveryman);
