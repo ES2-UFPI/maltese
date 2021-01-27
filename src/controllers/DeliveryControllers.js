@@ -66,6 +66,9 @@ module.exports = {
             res.status(404).send({ error: "Delivery not found!" });
         }
 
+        await delivery.populate("order").execPopulate();
+        await delivery.populate("order.items.product").execPopulate();
+
         res.status(200).json(delivery);
     },
 
