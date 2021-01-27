@@ -10,6 +10,7 @@ const ProductContollers = require("./controllers/ProductControllers");
 const OrderControllers = require("./controllers/OrderControllers");
 const DeliveryControllers = require("./controllers/DeliveryControllers");
 const ConfirmationController = require("./controllers/ConfirmationController");
+const ConversationController = require("./controllers/ConversationController");
 
 const upload = multer(uploadConfig);
 
@@ -85,6 +86,14 @@ routes
     .post("/deliveries", DeliveryControllers.create)
     .put("/deliveries/:delivery_id", DeliveryControllers.update)
     .delete("/deliveries/:delivery_id", DeliveryControllers.delete);
+
+// Conversation routes
+routes
+    .get("/conversation", ConversationController.index)
+    .get("/conversation/:conversation_id", ConversationController.read)
+    .post("/conversation", ConversationController.create)
+    .put("/conversation/:conversation_id", ConversationController.update)
+    .delete("/conversation/:conversation_id", ConversationController.delete);
 
 routes
     .post("/confirm", ConfirmationController.confirm);
