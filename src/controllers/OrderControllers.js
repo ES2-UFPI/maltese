@@ -8,7 +8,7 @@ module.exports = {
     },
 
     async create(req, res) {
-        const { client, provider, items, status } = req.body;
+        const { client, provider, items, status, address } = req.body;
 
         if (!client || !provider || !items) {
             return res
@@ -26,6 +26,7 @@ module.exports = {
             provider,
             items,
             status,
+            address
         });
         if (!order) {
             return res.status(500).send({ error: "Failed to create order!" });
@@ -42,6 +43,8 @@ module.exports = {
         if (!order) {
             return res.status(404).send({ error: "Order not found!" });
         }
+
+        await order.populate("items.product").execPopulate();
 
         return res.status(200).json(order);
     },
