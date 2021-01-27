@@ -23,6 +23,10 @@ const OrderSchema = new mongoose.Schema({
         required: true,
         default: 0,
     },
+    conversation: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Conversation",
+    },
     address: String,
     createdAt: {
         type: Date,
