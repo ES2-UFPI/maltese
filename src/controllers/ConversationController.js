@@ -31,7 +31,7 @@ module.exports = {
      * Retrieve a conversation in the database
      */
     async read(req, res) {
-        const { client_id: conversation_id } = req.params;
+        const { conversation_id } = req.params;
         if (!conversation_id) {
             return res.status(400).send({ error: "Invalid request parameters!" });
         }

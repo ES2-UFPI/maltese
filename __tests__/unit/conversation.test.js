@@ -21,6 +21,7 @@ describe("Conversation (Plain Requests)", () => {
     it("List conversations (plain request)", async () => {
         const response = await request(app)
             .get("/conversation");
+        console.log(response.body);
 
         expect(response.status).toBe(200);
     });
@@ -36,22 +37,28 @@ describe("Conversation (Plain Requests)", () => {
 
     // Read route
     it("Reads a conversation (plain request)", async () => {
-        const conversations = await request(app).get("/conversation");
-        const conversation = conversations[0];
+        const createresponse = await request(app)
+            .post("/conversation")
+            .send({ retrieve_chat: [], deliver_chat: [] });
+        expect(createresponse.status).toBe(201);
+        const conversation = createresponse.body;
 
         const response = await request(app)
-            .get($`/conversation/${conversation._id}`);
+            .get(`/conversation/${conversation._id}`);
 
         expect(response.status).toBe(200);
     });
 
     // Update route
     it("Updates a conversation (plain request)", async () => {
-        const conversations = await request(app).get("/conversation");
-        const conversation = conversations[0];
+        const createresponse = await request(app)
+            .post("/conversation")
+            .send({ retrieve_chat: [], deliver_chat: [] });
+        expect(createresponse.status).toBe(201);
+        const conversation = createresponse.body;
 
         const response = await request(app)
-            .put($`/conversation/${conversation._id}`)
+            .put(`/conversation/${conversation._id}`)
             .send({
                 retrieve_chat: [
                     { sender: 0, message: "Hello, I am Provider!"},
@@ -68,11 +75,14 @@ describe("Conversation (Plain Requests)", () => {
 
     // Delete route
     it("Deletes a conversation (plain request)", async () => {
-        const conversations = await request(app).get("/conversation");
-        const conversation = conversations[0];
+        const createresponse = await request(app)
+            .post("/conversation")
+            .send({ retrieve_chat: [], deliver_chat: [] });
+        expect(createresponse.status).toBe(201);
+        const conversation = createresponse.body;
 
         const response = await request(app)
-            .delete($`/conversation/${conversation._id}`);
+            .delete(`/conversation/${conversation._id}`);
             
         expect(response.status).toBe(204);
     });
