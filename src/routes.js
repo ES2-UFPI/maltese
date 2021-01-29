@@ -9,7 +9,6 @@ const DeliverymanControllers = require("./controllers/DeliverymanControllers");
 const ProductContollers = require("./controllers/ProductControllers");
 const OrderControllers = require("./controllers/OrderControllers");
 const DeliveryControllers = require("./controllers/DeliveryControllers");
-const ConfirmationController = require("./controllers/ConfirmationController");
 const ConversationController = require("./controllers/ConversationController");
 
 const upload = multer(uploadConfig);
@@ -77,7 +76,8 @@ routes
     .get("/orders/:order_id", OrderControllers.read)
     .post("/orders", OrderControllers.create)
     .put("/orders/:order_id", OrderControllers.update)
-    .delete("/orders/:order_id", OrderControllers.delete);
+    .delete("/orders/:order_id", OrderControllers.delete)
+    .put("/orders/:order_id/updateOrder", OrderControllers.updateOrder);
 
 // Delivery Routes
 routes
@@ -94,8 +94,5 @@ routes
     .post("/conversation", ConversationController.create)
     .put("/conversation/:conversation_id", ConversationController.update)
     .delete("/conversation/:conversation_id", ConversationController.delete);
-
-routes
-    .post("/confirm", ConfirmationController.confirm);
 
 module.exports = routes;
