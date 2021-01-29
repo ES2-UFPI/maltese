@@ -16,7 +16,11 @@ module.exports = {
                 .send({ error: "Invalid request parameters!" });
         }
 
-        const existing_order = await Order.findOne({ client, items, status });
+        const existing_order = await Order.findOne({
+            client,
+            provider,
+            status,
+        });
         if (existing_order) {
             return res.status(403).send({ error: "Order already exists!" });
         }
@@ -26,7 +30,7 @@ module.exports = {
             provider,
             items,
             status,
-            address
+            address,
         });
         if (!order) {
             return res.status(500).send({ error: "Failed to create order!" });
@@ -51,9 +55,9 @@ module.exports = {
 
     async update(req, res) {
         const { order_id } = req.params;
-        const { client, provider, items, status } = req.body;
+        const { client, provider, items, status, address } = req.body;
 
-        if (!client || !provider || !items || !status) {
+        if (!client || !provider || !items) {
             return res
                 .status(401)
                 .send({ error: "Invalid request parameters!" });
@@ -61,7 +65,7 @@ module.exports = {
 
         let order = await Order.findByIdAndUpdate(
             order_id,
-            { client, provider, items, status },
+            { client, provider, items, status, address },
             { new: true }
         );
         if (!order) {
@@ -83,5 +87,27 @@ module.exports = {
         await order.delete();
 
         return res.sendStatus(204);
+    },
+
+    async updateOrder(req, res) {
+        const { order_id } = req.params;
+        const { status, rating = 0 } = req.body;
+
+        if (!status) {
+            return res
+                .status(401)
+                .send({ error: "Invalid request parameters!" });
+        }
+
+        let order = await Order.findByIdAndUpdate(
+            order_id,
+            { status, rating },
+            { new: true }
+        );
+        if (!order) {
+            return res.status(404).send({ error: "Order not found" });
+        }
+
+        return res.status(200).json(order);
     },
 };

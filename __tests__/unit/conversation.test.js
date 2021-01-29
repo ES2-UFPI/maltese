@@ -19,9 +19,7 @@ describe("Conversation (Plain Requests)", () => {
 
     // List route
     it("List conversations (plain request)", async () => {
-        const response = await request(app)
-            .get("/conversation");
-        console.log(response.body);
+        const response = await request(app).get("/conversation");
 
         expect(response.status).toBe(200);
     });
@@ -43,8 +41,9 @@ describe("Conversation (Plain Requests)", () => {
         expect(createresponse.status).toBe(201);
         const conversation = createresponse.body;
 
-        const response = await request(app)
-            .get(`/conversation/${conversation._id}`);
+        const response = await request(app).get(
+            `/conversation/${conversation._id}`
+        );
 
         expect(response.status).toBe(200);
     });
@@ -61,13 +60,13 @@ describe("Conversation (Plain Requests)", () => {
             .put(`/conversation/${conversation._id}`)
             .send({
                 retrieve_chat: [
-                    { sender: 0, message: "Hello, I am Provider!"},
-                    { sender: 1, message: "Hello, I am Deliveryman!"}
+                    { sender: 0, message: "Hello, I am Provider!" },
+                    { sender: 1, message: "Hello, I am Deliveryman!" },
                 ],
                 deliver_chat: [
-                    { sender: 0, message: "Hello, I am Deliveryman!"},
-                    { sender: 1, message: "Hello, I am Client!"}
-                ]
+                    { sender: 0, message: "Hello, I am Deliveryman!" },
+                    { sender: 1, message: "Hello, I am Client!" },
+                ],
             });
 
         expect(response.status).toBe(200);
@@ -81,9 +80,10 @@ describe("Conversation (Plain Requests)", () => {
         expect(createresponse.status).toBe(201);
         const conversation = createresponse.body;
 
-        const response = await request(app)
-            .delete(`/conversation/${conversation._id}`);
-            
+        const response = await request(app).delete(
+            `/conversation/${conversation._id}`
+        );
+
         expect(response.status).toBe(204);
     });
 });
