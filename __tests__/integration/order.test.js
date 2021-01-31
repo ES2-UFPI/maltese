@@ -463,6 +463,54 @@ describe("OrderPut", () => {
         expect(response.status).toBe(200);
     });
 
+    it("should cancel a order", async () => {
+        const user = await User.create({
+            login: "fulano@example.com",
+            password: "123456",
+        });
+
+        const client = await Client.create({ name: "Fulano", user: user._id });
+
+        const provider = await Provider.create({
+            name: "FulanoBar",
+            user: user._id,
+        });
+
+        const product = await Product.create({
+            name: "Cerveja",
+            price: 10,
+            description: "foo",
+        });
+
+        const order = await Order.create({
+            client: client._id,
+            provider: provider._id,
+            items: [
+                {
+                    product: product._id,
+                    quantity: 30,
+                },
+            ],
+            address: "-22.951683817477424, -43.2104550160534",
+            status: 0,
+        });
+
+        const response = await request(app).put(`/orders/${order._id}`).send({
+            client: client._id,
+            provider: provider._id,
+            items: [
+                {
+                    product: product._id,
+                    quantity: 100,
+                },
+            ],
+            address: "-25.951683817477424, -93.2104550160534",
+            status: -1,
+        });
+
+        expect(response.status).toBe(200);
+    });
+
     it("should not update a order without client", async () => {
         const user = await User.create({
             login: "fulano@example.com",
