@@ -9,7 +9,7 @@ const DeliverymanControllers = require("./controllers/DeliverymanControllers");
 const ProductContollers = require("./controllers/ProductControllers");
 const OrderControllers = require("./controllers/OrderControllers");
 const DeliveryControllers = require("./controllers/DeliveryControllers");
-const ConfirmationController = require("./controllers/ConfirmationController");
+const ConversationController = require("./controllers/ConversationController");
 
 const upload = multer(uploadConfig);
 
@@ -28,7 +28,8 @@ routes
     .post("/clients", ClientControllers.create)
     .put("/clients/:client_id", ClientControllers.update)
     .delete("/clients/:client_id", ClientControllers.delete)
-    .get("/clients/:cliend_id/search/:name", ClientControllers.search);
+    .get("/clients/:cliend_id/search/:name", ClientControllers.search)
+    .get("/clients/:client_id/history", ClientControllers.history);
 
 // Provider Routes
 routes
@@ -50,6 +51,7 @@ routes
     .put("/providers/:provider_id/:product_id", ProviderControllers.updateProviderProduct)
     .get("/providers/:provider_id/showProducts/:product_id", ProviderControllers.getProductInfo)
     .delete("/providers/:provider_id/:product_id", ProviderControllers.removeProductById)
+    .get("/providers/:provider_id/history", ProviderControllers.history);
 
 // Deliveryman Routes
 routes
@@ -65,7 +67,8 @@ routes
     .get("/products/:product_id", ProductContollers.read)
     .post("/products", upload.single("image"), ProductContollers.create)
     .put("/products/:product_id", ProductContollers.update)
-    .delete("/products/:product_id", ProductContollers.delete);
+    .delete("/products/:product_id", ProductContollers.delete)
+    .get("/deliverymen/:deliveryman_id/history", DeliverymanControllers.history);
 
 // Order Routes
 routes
@@ -73,7 +76,8 @@ routes
     .get("/orders/:order_id", OrderControllers.read)
     .post("/orders", OrderControllers.create)
     .put("/orders/:order_id", OrderControllers.update)
-    .delete("/orders/:order_id", OrderControllers.delete);
+    .delete("/orders/:order_id", OrderControllers.delete)
+    .put("/orders/:order_id/updateOrder", OrderControllers.updateOrder);
 
 // Delivery Routes
 routes
@@ -83,7 +87,12 @@ routes
     .put("/deliveries/:delivery_id", DeliveryControllers.update)
     .delete("/deliveries/:delivery_id", DeliveryControllers.delete);
 
+// Conversation routes
 routes
-    .post("/confirm", ConfirmationController.confirm);
+    .get("/conversation", ConversationController.index)
+    .get("/conversation/:conversation_id", ConversationController.read)
+    .post("/conversation", ConversationController.create)
+    .put("/conversation/:conversation_id", ConversationController.update)
+    .delete("/conversation/:conversation_id", ConversationController.delete);
 
 module.exports = routes;

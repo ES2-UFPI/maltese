@@ -1,4 +1,5 @@
 const Deliveryman = require("../models/Deliveryman");
+const Delivery = require("../models/Delivery");
 
 module.exports = {
     async index(req, res) {
@@ -18,12 +19,16 @@ module.exports = {
 
         const existing_deliveryman = await Deliveryman.findOne({ user });
         if (existing_deliveryman) {
-            return res.status(403).send({ error: "Deliveryman already exists!" });
+            return res
+                .status(403)
+                .send({ error: "Deliveryman already exists!" });
         }
 
         const deliveryman = await Deliveryman.create({ name, user });
         if (!deliveryman) {
-            return res.status(500).send({ error: "Failed to create Deliveryman!" });
+            return res
+                .status(500)
+                .send({ error: "Failed to create Deliveryman!" });
         }
 
         return res.status(201).json(deliveryman);
@@ -73,5 +78,31 @@ module.exports = {
         await deliveryman.delete();
 
         return res.sendStatus(204);
+    },
+
+    async history(req, res) {
+        const { deliveryman_id } = req.params;
+
+        const deliveries = await Delivery.find({
+            deliveryman: deliveryman_id,
+        }).populate({
+            path: "order",
+            model: "Order",
+            populate: { path: "items.product" },
+        });
+
+        const finishedDeliveries = [];
+        deliveries.map((deliverie) => {
+            if (deliverie.status === 1 || deliverie.status === -1) {
+                finishedDeliveries.push(deliverie);
+            }
+        });
+
+        function recenteParaMaisAntigo(a, b) {
+            return b.createdAt - a.createdAt;
+        }
+        finishedDeliveries.sort(recenteParaMaisAntigo);
+
+        return res.status(200).json(finishedDeliveries);
     },
 };

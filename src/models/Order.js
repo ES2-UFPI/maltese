@@ -23,6 +23,15 @@ const OrderSchema = new mongoose.Schema({
         required: true,
         default: 0,
     },
+    conversation: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Conversation",
+    },
+    address: String,
+    rating: {
+        type: Number,
+        default: 0,
+    },
     createdAt: {
         type: Date,
         default: Date.now,
