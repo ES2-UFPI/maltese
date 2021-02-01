@@ -110,4 +110,26 @@ module.exports = {
 
         return res.status(200).json(order);
     },
+
+    async attachConversation(req, res) {
+        const { order_id } = req.params;
+        const { conversation } = req.body;
+
+        if (!conversation) {
+            return res
+                .status(400)
+                .send({ error: "Invalid request parameters!" });
+        }
+
+        let order = await Order.findByIdAndUpdate(
+            order_id,
+            { conversation },
+            { new: true }
+        );
+        if (!order) {
+            return res.status(404).send({ error: "Order not found" });
+        }
+
+        return res.status(200).json(order);
+    },
 };

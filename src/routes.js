@@ -77,7 +77,8 @@ routes
     .post("/orders", OrderControllers.create)
     .put("/orders/:order_id", OrderControllers.update)
     .delete("/orders/:order_id", OrderControllers.delete)
-    .put("/orders/:order_id/updateOrder", OrderControllers.updateOrder);
+    .put("/orders/:order_id/updateOrder", OrderControllers.updateOrder)
+    .put("/orders/:order_id/attachConversation", OrderControllers.attachConversation);
 
 // Delivery Routes
 routes
